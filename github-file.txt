@@ -1,2 +1,3 @@
 File created on GitHub for laboratory work 6.
 Первое локальное изменение.
+Второе локальное изменение.

@@ -49,3 +49,156 @@
 ![Последние изменения](screenshots/05.png)
 
 *Рисунок 5 — Просмотр последнего коммита*
+
+### 5. Слияние веток и разрешение конфликта
+
+Создана побочная ветка `feature-edit`. В файле `mergefile.txt`
+изменено слово «важной» на «полезной», после чего выполнен коммит.
+
+![Изменения в побочной ветке](screenshots/06.png)
+
+*Рисунок 6 — Изменение файла в побочной ветке*
+
+После переключения на `master` то же слово заменено на
+«интересной» и выполнен отдельный коммит.
+
+![Изменения в основной ветке](screenshots/07.png)
+
+*Рисунок 7 — Изменение файла в основной ветке*
+
+При выполнении команды `git merge feature-edit` возник конфликт,
+поскольку одна строка была изменена по-разному в двух ветках.
+
+![Конфликт слияния](screenshots/08.png)
+
+*Рисунок 8 — Обнаружение конфликта слияния*
+
+Для разрешения конфликта использован редактор Visual Studio Code.
+Выбран вариант из ветки `feature-edit` — слово «полезной».
+
+![Разрешение конфликта](screenshots/09.png)
+
+*Рисунок 9 — Конфликтующие изменения в VS Code*
+
+После исправления файла выполнен коммит слияния.
+Команда `git status` подтвердила отсутствие незавершённых изменений.
+
+![Завершение слияния](screenshots/10.png)
+
+*Рисунок 10 — Успешное завершение слияния*
+
+### 6. Удаление побочной ветки
+
+После успешного слияния локальная ветка `feature-edit`
+удалена командой `git branch -d feature-edit`.
+
+![Удаление ветки](screenshots/11.png)
+
+*Рисунок 11 — Удаление побочной ветки*
+
+### 7. Создание последовательных коммитов
+
+В файл `github-file.txt` дважды внесены изменения.
+Каждое изменение зафиксировано отдельным коммитом
+с соответствующим комментарием.
+
+![Первый коммит](screenshots/12.png)
+
+*Рисунок 12 — Первый локальный коммит*
+
+![Второй коммит](screenshots/13.png)
+
+*Рисунок 13 — Второй локальный коммит*
+
+### 8. Откат коммита
+
+Для отмены последнего изменения использована команда
+`git revert --no-edit HEAD`.
+
+В результате создан новый коммит, отменяющий изменение,
+при этом исходный коммит остался в истории.
+
+![Откат коммита](screenshots/14.png)
+
+*Рисунок 14 — Откат последнего коммита*
+
+### 9. Создание ветки для отчёта
+
+Командой `git switch -c report` создана отдельная ветка
+для оформления отчёта.
+
+![Создание ветки report](screenshots/15.png)
+
+*Рисунок 15 — Создание ветки для отчёта*
+
+
+## Лог использованных команд
+
+Ниже приведены команды, использованные при выполнении лабораторной работы, без результатов их выполнения.
+
+```powershell
+git --version
+git config --global user.name
+git config --global user.email
+git config --global user.name "И4515 Тугунова В.А."
+
+cd $HOME
+git clone https://github.com/w1qcka/LR6.git
+cd LR6
+git status
+
+git pull origin master
+dir
+git status
+
+git branch -a
+git log --oneline --all --graph --decorate
+git show HEAD
+
+Get-Content -Encoding UTF8 mergefile.txt
+git switch -c feature-edit
+git branch
+(Get-Content -Encoding UTF8 mergefile.txt) -replace 'важной', 'полезной' | Set-Content -Encoding UTF8 mergefile.txt
+Get-Content -Encoding UTF8 mergefile.txt
+git add mergefile.txt
+git commit -m "Изменение файла в побочной ветке"
+
+git switch master
+(Get-Content -Encoding UTF8 mergefile.txt) -replace 'важной', 'интересной' | Set-Content -Encoding UTF8 mergefile.txt
+Get-Content -Encoding UTF8 mergefile.txt
+git add mergefile.txt
+git commit -m "Изменение файла в основной ветке"
+
+git merge feature-edit
+code mergefile.txt
+git add mergefile.txt
+git commit -m "Слияние feature-edit с master и разрешение конфликта"
+git status
+
+git branch -d feature-edit
+git branch
+
+Add-Content -Encoding UTF8 github-file.txt "Первое локальное изменение."
+git add github-file.txt
+git commit -m "Первое локальное изменение файла"
+git status
+
+Add-Content -Encoding UTF8 github-file.txt "Второе локальное изменение."
+git diff
+git add github-file.txt
+git commit -m "Второе локальное изменение файла"
+git status
+
+git revert --no-edit HEAD
+git log --oneline -4
+git status
+
+git switch -c report
+git branch
+mkdir screenshots
+code .
+
+git add README.md screenshots/
+git commit -m "Добавлена первая часть отчета со скриншотами"
+git status
+```
